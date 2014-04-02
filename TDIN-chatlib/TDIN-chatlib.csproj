@@ -39,7 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChatException.cs" />
     <Compile Include="ChatSeverInterface.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="IPAddress.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
