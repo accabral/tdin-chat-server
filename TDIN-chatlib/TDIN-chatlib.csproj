@@ -41,13 +41,14 @@
   <ItemGroup>
     <Compile Include="ChatException.cs" />
     <Compile Include="ChatSeverInterface.cs" />
-    <Compile Include="IPUser.cs" />
-    <Compile Include="LoginUser.cs" />
-    <Compile Include="User.cs" />
+    <Compile Include="User\IPUser.cs" />
+    <Compile Include="User\LoginUser.cs" />
+    <Compile Include="User\User.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="IPAddress.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserSession.cs" />
+    <Compile Include="User\UserSession.cs" />
+    <Compile Include="UserSubscribeInterface.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

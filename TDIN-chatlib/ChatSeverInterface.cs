@@ -8,7 +8,11 @@ namespace TDIN_chatlib
 {
     public interface ChatSeverInterface
     {
-        IList<IPAddress> getActiveClients();
+
+        /// <summary>
+        /// Retorna a lista actual dos clientes activos
+        /// </summary>
+        IList<IPUser> getActiveClients();
 
         /// <summary>Chamado pelo cliente quando se pretende registar no server.
         /// É fornecido o username e password do cliente no ChatUser, caso não esteja registado o servidor deve registar um novo utilizador.

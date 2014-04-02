@@ -8,6 +8,8 @@ namespace TDIN_chatlib
 {
     public static class Constants
     {
-        public const string SERVER_SERVICE = "ServerOject";
+        public const string SERVER_SERVICE = "ChatServerOject";
+
+        public const string CLIENT_SUBSCRIBE_SERVICE = "ClientSubscribeOject";
     }
 }
