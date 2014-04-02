@@ -11,11 +11,18 @@ namespace TDIN_chatlib
         IList<IPAddress> getActiveClients();
 
         /// <summary>Chamado pelo cliente quando se pretende registar no server.
-        /// É fornecido o username e password do cliente, caso não esteja registado o servidor deve registar um novo utilizador.
+        /// É fornecido o username e password do cliente no ChatUser, caso não esteja registado o servidor deve registar um novo utilizador.
         /// </summary>
+        /// <param name="user">Em caso de registo os campos deverão estar todos preenchidos, em caso de login apenas é necessário o user e a password</param>
         /// <exception cref="ChatException">Em caso de não ser possível registar novo user ou password estiver errada</exception>
-        /// <returns>Em caso de sucesso a hash de sessão, em caso de erro null</returns>
-        string registerClient(IPAddress address, string user, string pass);
+        /// <returns>Em caso de sucesso retorna um UserSession com todos os dados preenchidos, em caso de erro deve atirar uma excepção e retornar null</returns>
+        UserSession registerClient(IPAddress address, LoginUser user);
+
+
+        /// <summary>Utilizado para obter informação sobr eum utilizador</summary>
+        /// <exception cref="ChatException">Em caso de não ser possível encontrar o utilizador</exception>
+        /// <returns>Em caso de sucesso retorna um User com todos todos os dados preenchidos</returns>
+        User queryUser(string username);
 
 
         /// <summary>Chamado pelo cliente quando se pretende desconectar do server</summary>
