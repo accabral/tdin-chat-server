@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TDIN_chatlib
 {
-    interface UserSubscribeInterface
+    public interface UserSubscribeInterface
     {
         /// <summary>
         /// Informa ao cliente que a lista dos users activos foi modificada, e se este o quiser poderá efectuar um novo pedido dessa lista acualizada

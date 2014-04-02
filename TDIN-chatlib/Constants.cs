@@ -11,5 +11,7 @@ namespace TDIN_chatlib
         public const string SERVER_SERVICE = "ChatServerOject";
 
         public const string CLIENT_SUBSCRIBE_SERVICE = "ClientSubscribeOject";
+
+        public const int DEFAULT_SERVER_PORT = 61234;
     }
 }
