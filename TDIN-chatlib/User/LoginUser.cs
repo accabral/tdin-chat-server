@@ -17,6 +17,7 @@ namespace TDIN_chatlib
             this._pass = pass;
         }
 
+
         public LoginUser(string username, string pass)
             : this(username, null, pass)
         {

@@ -10,6 +10,7 @@ namespace TDIN_chatlib
     {
         private IPAddress _address;
 
+
         public IPUser(string username, string name, IPAddress address)
             : base(username, name)
         {

@@ -8,19 +8,19 @@ namespace TDIN_chatlib
 {
     public class UserSession : User
     {
-
         private string _sessionHash;
 
-
-        public UserSession(string user, string name)
-            : base(user, name)
-        {
-        }
 
         public UserSession(string user, string name, string sessionHash)
             : base(user, name)
         {
             this._sessionHash = sessionHash;
+        }
+
+
+        public UserSession(string user, string name)
+            : this(user, name, null)
+        {
         }
 
 
