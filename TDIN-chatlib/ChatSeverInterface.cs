@@ -23,7 +23,7 @@ namespace TDIN_chatlib
         UserSession registerClient(IPAddress address, LoginUser user);
 
 
-        /// <summary>Utilizado para obter informação sobr eum utilizador</summary>
+        /// <summary>Utilizado para obter informação sobre um utilizador</summary>
         /// <exception cref="ChatException">Em caso de não ser possível encontrar o utilizador</exception>
         /// <returns>Em caso de sucesso retorna um User com todos todos os dados preenchidos</returns>
         User queryUser(string username);
