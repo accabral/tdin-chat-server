@@ -14,6 +14,9 @@ namespace TDIN_chatserver
 {
     class ChatServer : TDIN_chatlib.ChatSeverInterface
     {
+
+        private IList<TDIN_chatlib.IPUser> activeClients;
+
         public ChatServer()
         {
             registerServer();
@@ -69,8 +72,7 @@ namespace TDIN_chatserver
         /// <returns></returns>
         public IList<TDIN_chatlib.IPUser> getActiveClients()
         {
-
-            return null;
+            return this.activeClients;
         }
 
         /// <summary>
@@ -81,7 +83,13 @@ namespace TDIN_chatserver
         /// <returns></returns>
         public TDIN_chatlib.UserSession registerClient(TDIN_chatlib.IPAddress address, TDIN_chatlib.LoginUser user)
         {
-            return null;
+            //TODO: Complete according with the interface specification.
+            // Create user and add it to active users.
+            TDIN_chatlib.IPUser new_user = new TDIN_chatlib.IPUser(user.Username, user.Name);
+            activeClients.Add(new_user);
+            // Build a session and return it.
+            TDIN_chatlib.UserSession session = new TDIN_chatlib.UserSession(user.Username, user.Name);
+            return session;
         }
 
         /// <summary>
@@ -103,7 +111,5 @@ namespace TDIN_chatserver
         {
             System.Console.WriteLine("buh");
         }
-
-
     }
 }
