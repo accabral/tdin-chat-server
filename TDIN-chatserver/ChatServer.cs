@@ -16,6 +16,9 @@ namespace TDIN_chatserver
     {
 
         private IList<TDIN_chatlib.IPUser> activeClients;
+        // Redudant... The string is the same as inside de UserSession class. 
+        // The users are also in the activeclients IList.
+        private Dictionary<string, TDIN_chatlib.UserSession> sessions = new Dictionary<string,TDIN_chatlib.UserSession>();
 
         public ChatServer()
         {
@@ -89,6 +92,7 @@ namespace TDIN_chatserver
             activeClients.Add(new_user);
             // Build a session and return it.
             TDIN_chatlib.UserSession session = new TDIN_chatlib.UserSession(user.Username, user.Name);
+            sessions.Add(session.SessionHash, session);
             return session;
         }
 
