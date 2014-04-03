@@ -8,8 +8,8 @@ namespace TDIN_chatlib
 {
     public class User : MarshalByRefObject
     {
-        private string _user;
-        private string _name;
+        private string _user = null;
+        private string _name = null;
 
 
         public User(string username, string name)

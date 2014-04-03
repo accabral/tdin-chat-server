@@ -8,7 +8,7 @@ namespace TDIN_chatlib
 {
     public class UserSession : User
     {
-        private string _sessionHash;
+        private string _sessionHash = null;
 
 
         public UserSession(string user, string name, string sessionHash)

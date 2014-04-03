@@ -8,7 +8,7 @@ namespace TDIN_chatlib
 {
     public class LoginUser : User
     {
-        private string _pass;
+        private string _pass = null;
 
 
         public LoginUser(string username, string pass, string name)
@@ -19,7 +19,7 @@ namespace TDIN_chatlib
 
 
         public LoginUser(string username, string pass)
-            : this(username, null, pass)
+            : this(username, pass, null)
         {
         }
 

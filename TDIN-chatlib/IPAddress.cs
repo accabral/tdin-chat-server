@@ -8,8 +8,8 @@ namespace TDIN_chatlib
 {
     public class IPAddress : MarshalByRefObject
     {
-        private string _ip;
-        private int _port;
+        private string _ip = null;
+        private int _port = -1;
 
         public IPAddress(string ip, int port)
         {

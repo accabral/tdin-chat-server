@@ -16,10 +16,11 @@ namespace TDIN_chatserver
     class ChatServer : MarshalByRefObject, TDIN_chatlib.ChatSeverInterface
     {
 
-        private IList<TDIN_chatlib.IPUser> activeClients = new List<TDIN_chatlib.IPUser>();
+        //private IList<TDIN_chatlib.IPUser> activeClients = new List<TDIN_chatlib.IPUser>();
         // Redudant... The string is the same as inside de UserSession class. 
         // The users are also in the activeclients IList.
-        private Dictionary<string, TDIN_chatlib.UserSession> sessions = new Dictionary<string,TDIN_chatlib.UserSession>();
+        private Dictionary<string, TDIN_chatlib.IPUser> sessions = new Dictionary<string, TDIN_chatlib.IPUser>();
+        private IList<TDIN_chatlib.IPUser> _tempIPList = null;
 
         public ChatServer()
         {
@@ -31,7 +32,11 @@ namespace TDIN_chatserver
         /// <returns></returns>
         public IList<TDIN_chatlib.IPUser> getActiveClients()
         {
-            return this.activeClients;
+            // build temporary list with all active clients, preventing this list from being repetitively built on every query
+            if( _tempIPList == null )
+                _tempIPList = new List<TDIN_chatlib.IPUser>(this.sessions.Values);
+
+            return _tempIPList;
         }
 
 
@@ -70,11 +75,19 @@ namespace TDIN_chatserver
         {
             //TODO: Complete according with the interface specification.
             // Create user and add it to active users.
-            TDIN_chatlib.IPUser new_user = new TDIN_chatlib.IPUser(user.Username, user.Name, address);
-            activeClients.Add(new_user);
-            // Build a session and return it.
+            TDIN_chatlib.IPUser ipUser = new TDIN_chatlib.IPUser(user.Username, user.Name, address);
             TDIN_chatlib.UserSession session = new TDIN_chatlib.UserSession(user.Username, user.Name, generateRandomHash());
-            sessions.Add(session.SessionHash, session);
+
+            sessions.Add(session.SessionHash, ipUser);
+
+            // force active client list to be rebuilt on next user query
+            _tempIPList = null;
+            
+            
+            // Mudei um pouco aqui as coisas, falta então fazeres a tua classe interna com toda a informação,
+            // tipo base de dados, ou usares o LoginUser que até agora acho que tem tudo o que é preciso relativamente ao user (como se fosse para guardar na BD)
+            //activeClients.Add(new_user);
+            // Build a session and return it.
 
             Console.WriteLine("* [" + session.SessionHash + "] New user: " + session.Username);
 

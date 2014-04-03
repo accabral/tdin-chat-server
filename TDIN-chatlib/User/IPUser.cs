@@ -8,7 +8,7 @@ namespace TDIN_chatlib
 {
     public class IPUser : User
     {
-        private IPAddress _address;
+        private IPAddress _address = null;
 
 
         public IPUser(string username, string name, IPAddress address)
