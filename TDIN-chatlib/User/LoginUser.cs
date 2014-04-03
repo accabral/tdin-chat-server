@@ -11,7 +11,7 @@ namespace TDIN_chatlib
         private string _pass;
 
 
-        public LoginUser(string username, string name, string pass )
+        public LoginUser(string username, string pass, string name)
             : base(username, name)
         {
             this._pass = pass;
