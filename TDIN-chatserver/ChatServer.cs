@@ -9,6 +9,7 @@ using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace TDIN_chatserver
 {
@@ -21,6 +22,8 @@ namespace TDIN_chatserver
         private Dictionary<string, TDIN_chatlib.IPUser> sessions = new Dictionary<string, TDIN_chatlib.IPUser>();
         private Dictionary<string, TDIN_chatlib.UserSubscribeInterface> sessionInterface = new Dictionary<string, TDIN_chatlib.UserSubscribeInterface>();
         private IList<TDIN_chatlib.IPUser> _tempIPList = null;
+        private readonly object syncLock = new object();
+        private long _count = 0;
 
         public ChatServer()
         {
@@ -30,13 +33,19 @@ namespace TDIN_chatserver
         /// 
         /// </summary>
         /// <returns></returns>
-        public IList<TDIN_chatlib.IPUser> getActiveClients()
+        public IList<TDIN_chatlib.IPUser> getActiveClients(long count)
         {
             // build temporary list with all active clients, preventing this list from being repetitively built on every query
-            if( _tempIPList == null )
-                _tempIPList = new List<TDIN_chatlib.IPUser>(this.sessions.Values);
+            Console.WriteLine("* Received update request: " + count);
 
-            return _tempIPList;
+            lock (syncLock)
+            {
+                if (_tempIPList == null)
+                    _tempIPList = new List<TDIN_chatlib.IPUser>(this.sessions.Values);
+
+                Console.WriteLine("* Returning client list to: " + count);
+                return _tempIPList;
+            }
         }
 
 
@@ -71,16 +80,18 @@ namespace TDIN_chatserver
                 if (handshakeUID != uid)
                     throw new TDIN_chatlib.ChatException("UIDs do not match");
 
-                sessionInterface.Add(session.SessionHash, usi);
-                sessions.Add(session.SessionHash, ipUser);
+                lock (syncLock)
+                {
+                    sessionInterface.Add(session.SessionHash, usi);
+                    sessions.Add(session.SessionHash, ipUser);
 
-                // force active client list to be rebuilt on next user query
-                _tempIPList = null;
+                    // force active client list to be rebuilt on next user query
+                    _tempIPList = null;
 
-                // Build a session and return it.
+                    Console.WriteLine("* New user: " + session.Username + ", uid: " + uid + ", hash: " + session.SessionHash);
+                }
 
-                Console.WriteLine("* New user: " + session.Username + ", uid: " + uid + ", hash: " + session.SessionHash);
-
+                _createUpdateClientThread();
             }
             catch (TDIN_chatlib.ChatException ex1)
             {
@@ -93,18 +104,9 @@ namespace TDIN_chatserver
                 throw new TDIN_chatlib.ChatException("Error on handshake");
             }
 
-            return session;
-        }
+            Console.WriteLine("* Registering client with user: " + session.Username + " terminated");
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        public TDIN_chatlib.User queryUser(string username)
-        {
-            System.Console.WriteLine("buh");
-            return null;
+            return session;
         }
 
         /// <summary>
@@ -113,7 +115,63 @@ namespace TDIN_chatserver
         /// <param name="hashCode"></param>
         public void disconnectClient(string hashCode)
         {
-            System.Console.WriteLine("buh");
+            lock (syncLock)
+            {
+                if (sessionInterface.ContainsKey(hashCode))
+                {
+                    sessions.Remove(hashCode);
+                    sessionInterface.Remove(hashCode);
+
+                    _tempIPList = null;
+
+                    _createUpdateClientThread();
+                }
+            }
+        }
+
+        private void _createUpdateClientThread()
+        {
+            Thread t = new Thread(informClientsListChanged);
+            t.Start();
+        }
+
+
+        private void informClientsListChanged()
+        {
+            lock (syncLock)
+            {
+                Console.WriteLine("* Informing users client list has changed");
+
+                List<string> itemsToRemove = new List<string>();
+
+                foreach (KeyValuePair<string, TDIN_chatlib.UserSubscribeInterface> user in sessionInterface)
+                {
+                    try
+                    {
+                        long c = ++_count;
+                        Console.WriteLine("* Informing: " + user.Key +  " width update count: " +  c);
+
+                        user.Value.clientListUpdated(c);
+                    }
+                    catch (Exception e)
+                    {
+                        // if exception is thrown, its a sign the user has disconnected, so remove it from list;
+                        Console.WriteLine("* Session: " + user.Key + " did not responde, removing");
+
+                        itemsToRemove.Add(user.Key);
+                    }
+                }
+
+                foreach (string s in itemsToRemove)
+                {
+                    sessions.Remove(s);
+                    sessionInterface.Remove(s);
+                }
+
+                _tempIPList = null;
+
+                Console.WriteLine("* All users informed");
+            }
         }
     }
 }
