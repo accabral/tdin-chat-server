@@ -10,6 +10,7 @@ namespace TDIN_chatlib
     {
         private string _user = null;
         private string _name = null;
+        private string _uuid = null;
 
 
         public User(string username, string name)
@@ -31,6 +32,21 @@ namespace TDIN_chatlib
             set { this._name = value; }
         }
 
+        public string DisplayName
+        {
+            get { return this.Username + " (" + this.Name + ")"; }
+        }
+
+        public string UUID
+        {
+            get { return this._uuid; }
+            set { this._uuid = value; }
+        }
+
+        public void generateUID()
+        {
+            this._uuid = Guid.NewGuid().ToString();
+        }
 
     }
 }

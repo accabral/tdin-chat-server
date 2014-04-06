@@ -55,7 +55,7 @@ namespace TDIN_chatserver
         /// <param name="address"></param>
         /// <param name="user"></param>
         /// <returns></returns>
-        public TDIN_chatlib.UserSession registerClient(string uid, TDIN_chatlib.IPAddress address, TDIN_chatlib.LoginUser user)
+        public TDIN_chatlib.UserSession registerClient(string uid, TDIN_chatlib.InternalIPAddress address, TDIN_chatlib.LoginUser user)
         {
             //TODO: Complete according with the interface specification.
 
@@ -63,6 +63,8 @@ namespace TDIN_chatserver
             TDIN_chatlib.IPUser ipUser = new TDIN_chatlib.IPUser(user.Username, user.Name, address);
             TDIN_chatlib.UserSession session = new TDIN_chatlib.UserSession(user.Username, user.Name, TDIN_chatlib.Utils.generateRandomHash());
 
+            ipUser.generateUID();
+            session.UUID = ipUser.UUID;
 
             // Mudei um pouco aqui as coisas, falta então fazeres a tua classe interna com toda a informação,
             // tipo base de dados, ou usares o LoginUser que até agora acho que tem tudo o que é preciso relativamente ao user (como se fosse para guardar na BD)
@@ -132,6 +134,7 @@ namespace TDIN_chatserver
         private void _createUpdateClientThread()
         {
             Thread t = new Thread(informClientsListChanged);
+            t.TrySetApartmentState(ApartmentState.STA);
             t.Start();
         }
 

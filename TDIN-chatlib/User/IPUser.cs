@@ -8,10 +8,10 @@ namespace TDIN_chatlib
 {
     public class IPUser : User
     {
-        private IPAddress _address = null;
+        private InternalIPAddress _address = null;
 
 
-        public IPUser(string username, string name, IPAddress address)
+        public IPUser(string username, string name, InternalIPAddress address)
             : base(username, name)
         {
             this._address = address;
@@ -24,11 +24,9 @@ namespace TDIN_chatlib
         }
 
 
-        public IPAddress IPAddress
+        public InternalIPAddress IPAddress
         {
             get { return this._address; }
         }
-
-
     }
 }

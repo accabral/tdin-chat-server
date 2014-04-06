@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace TDIN_chatlib
 {
-    public class IPAddress : MarshalByRefObject
+    public class InternalIPAddress : MarshalByRefObject
     {
         private string _ip = null;
         private int _port = -1;
 
-        public IPAddress(string ip, int port)
+        public InternalIPAddress(string ip, int port)
         {
             this._ip = ip;
             this._port = port;
@@ -19,12 +19,14 @@ namespace TDIN_chatlib
 
         public string IP
         {
-            get { return _ip; }
+            get { return this._ip; }
+            set { this._ip = value; }
         }
 
         public int PORT
         {
-            get { return _port; }
+            get { return this._port; }
+            set { this._port = value; }
         }
         
     }
